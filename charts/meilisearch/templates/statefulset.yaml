@@ -13,7 +13,7 @@ spec:
   {{- if .Values.persistence.enabled }}
   volumeClaimTemplates:
   - metadata:
-      name: {{ .Values.persistence.volume.name }}-claim
+      name: {{ .Values.persistence.volume.name }}
     spec:
       accessModes:
         - ReadWriteOnce
@@ -47,11 +47,7 @@ spec:
       volumes:
         - name: tmp
           emptyDir: {}
-        {{- if .Values.persistence.enabled }}
-        - name: {{ .Values.persistence.volume.name }}
-          persistentVolumeClaim:
-            claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ include "meilisearch.fullname" . }}{{- end }}
-        {{- else }}
+        {{- if not .Values.persistence.enabled }}
         - name: {{ .Values.persistence.volume.name }}
           emptyDir: {}
         {{- end }}
